@@ -1,14 +1,13 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { fetchList, deleteList, fetchItem } from '../api/request.js';
+import { fetchList, deleteItem, fetchItem, fetchStore, fetchItInLiRecords } from '../api/request.js';
 
 
 const list = ref({});
-const ItemsInListRecord = ref([]);
 const record = ref({});
-const itemIds = ref([])
 const items = ref([]);
+const shops = ref([]);
 const loading = ref(true);
 
 const route = useRoute();
@@ -26,29 +25,40 @@ async function load()
         list.value = listData.fields 
         console.log('List geladen', list.value.fields)
 
-        ItemsInListRecord.value = list.value.ItemsInList
+        items.value = list.value.ItemsInList
 
-        for await (const element of ItemsInListRecord.value) {
+        for await (const element of items.value) {
           const recordData = await fetchList(element)
           record.value = recordData.fields 
           console.log('Record geladen', record.value.Items)
 
-          itemIds.value = record.value.Items
+          items.value[items.value.indexOf(element)] = record.value.Items
         }
 
-        for await (const element of itemIds.value) {
-          const itemData = await fetchList(element)
+        for await (const element of items.value) {
+          const itemData = await fetchItem(element)
           record.value = itemData.fields 
           console.log('Record geladen', record.value.Name)
 
-          items.value = record.value
+          items.value[items.value.indexOf(element)] = record.value
         }
+        
 
     } catch (error) {
         console.error(error)
     } finally {
         loading.value = false
     }
+}
+
+async function itemDelete(itemToDel)
+{
+  try {
+        await deleteItem(itemToDel[0]) 
+  } catch (error) {
+    console.error(error)
+  }
+  
 }
 </script>
 
@@ -62,18 +72,21 @@ async function load()
           <th>Item</th>
           <th>Price</th>
           <th>Store</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="item in items" :key="item.id">
           <td>{{ item.Name }}</td>
-          <td>{{ item.Price }}</td>
-          <td>{{ item.Stores }}</td>
+          <td>{{ item.Price }} CHF </td>
+          <td>{{ item.Stores[0] }}</td>
+          <td><button @click="">Edit</button>
+            <button @click="itemDelete(item.ItemsInList); load()">Delete</button></td>
         </tr>
       </tbody>
     </table>
-    <RouterLink to="/createlist">
-      <button>Add list</button>
+    <RouterLink :to="`/NewItemToList/${id}`">
+      <button>Add item</button>
     </RouterLink>
   </div>
 </template>

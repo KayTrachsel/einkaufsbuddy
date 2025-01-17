@@ -82,8 +82,69 @@ export async function deleteList (id) {
     return response
 }
 
+export async function fetchItems () {
+    const response = await request('tblk9bzkCovbKEKYK')
+    console.log(response);
+    return response
+}
+
 export async function fetchItem (id) {
     const response = await request('tblk9bzkCovbKEKYK/' + id)
+    console.log(response);
+    return response
+}
+
+//look at later
+export async function addItem (name,price) {
+    const response = await request('tblk9bzkCovbKEKYK', {
+        method:"POST",
+        body: JSON.stringify( {
+            "records":[{
+            "fields": {
+                    "Stores": ["recYJeO3J0vTFRCUL"],
+                    "Name": name,
+                    "Price":price
+                }}
+            ]
+            } )
+    })
+    console.log(response);
+    return response
+}
+
+export async function deleteItem (id) {
+    const response = await request('tblIGaNlRrdw7bAXF/'+id, {
+        method:"DELETE"
+    })
+    console.log(response);
+    return response
+}
+
+export async function fetchStore (id) {
+    const response = await request('tbl84xBjjyVqbrmF3/' + id)
+    console.log(response);
+    return response
+}
+
+export async function fetchItInLiRecords () {
+    const response = await request('tblIGaNlRrdw7bAXF')
+    console.log(response);
+    return response
+}
+
+export async function addItemToList (list,item,amount) {
+    const response = await request('tblIGaNlRrdw7bAXF', {
+        method:"POST",
+        body: JSON.stringify( {
+            "records":[{
+            "fields": {
+                    "Lists": [list],
+                    "Items": [item],
+                    "Amount":amount
+                }}
+            ]
+            } )
+    })
     console.log(response);
     return response
 }
