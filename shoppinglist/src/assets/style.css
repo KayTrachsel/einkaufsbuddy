@@ -1,0 +1,163 @@
+/* Stellt sicher, dass HTML und Body den gesamten Bildschirm einnehmen */
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Hintergrundbild */
+body {
+  background-image: url("./bilder/background1.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Hauptcontainer für Bild & Inhalt */
+.home {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  gap: 0vw;
+}
+
+/* Einkaufswagen-Bild */
+.shopping-cart {
+  flex: 1; /* Bild nimmt flexiblen Platz im Layout ein */
+  max-width: 30vw; /* Begrenzung auf 30% der Bildschirmbreite */
+  height: auto;
+  padding: 5vw;
+  object-fit: contain; /* Verhindert Verzerrung */
+  display: block;
+}
+
+/* Text & Buttons rechts */
+.home-content {
+  flex-grow: 2; /* Füllt die gesamte restliche Breite */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Alles mittig ausrichten */
+  justify-content: center;
+}
+
+/* Titel */
+h1 {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #246795;
+}
+
+/* Untertitel */
+p {
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  color: #246795;
+  margin-bottom: 1.5rem;
+}
+
+/* Button Container */
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Buttons */
+.home-button {
+  display: block;
+  width: clamp(10rem, 20vw, 15rem);
+  padding: 0.8rem 1.5rem;
+  background-color: #246795;
+  color: #fff;
+  text-align: center;
+  border-radius: 2rem;
+  text-decoration: none;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.home-button:hover {
+  background-color: #1a4d6f;
+}
+
+/* Login-Button oben rechts */
+.login-button {
+  position: absolute;
+  top: 2vh;
+  right: 2vw;
+  width: 10rem; /* Fixe Größe */
+  max-width: 10rem; /* Stellt sicher, dass der Button nicht größer wird */
+  padding: 0.8rem 1.5rem;
+  border-radius: 2rem;
+  font-size: 1rem;
+  background-color: #246795;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap; /* Verhindert Umbrüche */
+}
+
+.login-button:hover {
+  background-color: #1a4d6f;
+}
+
+/* 🚀 Fix für kleinere Bildschirme: Bild entfernen & Inhalte zentrieren */
+@media (max-width: 1024px) {
+  .home {
+    flex-direction: column; /* Stapelt Inhalt vertikal */
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  .shopping-cart {
+    display: none; /* Blendet das Bild aus */
+  }
+
+  .home-content {
+    width: 90%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Alles mittig ausrichten */
+    justify-content: center;
+  }
+
+  .button-container {
+    align-items: center;
+  }
+
+  .home-button {
+    width: 90%;
+  }
+}
+
+/* 🚀 Mobile Fix für sehr kleine Bildschirme */
+@media (max-width: 768px) {
+  .home {
+    flex-direction: column;
+    text-align: center;
+    height: 100vh;
+  }
+
+  .home-content {
+    width: 90%;
+    text-align: center;
+  }
+
+  .button-container {
+    align-items: center;
+  }
+
+  .home-button {
+    width: 90%;
+  }
+}
