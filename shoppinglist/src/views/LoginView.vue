@@ -1,60 +1,51 @@
 <script setup>
-import { ref, computed } from 'vue' 
-import { loginUser } from '../api/request.js'
-import { useRouter } from 'vue-router'
+import { ref, computed } from 'vue';
+import { loginUser } from '../api/request.js';
+import { useRouter } from 'vue-router';
 
-const password = ref('')
-const email = ref('')
+const password = ref('');
+const email = ref('');
 
-const hasLogin = computed(() => { return (email.value.length > 0) && (password.value.length > 0) })
+const hasLogin = computed(() => email.value.length > 0 && password.value.length > 0);
 
 const errors = ref({
-    email: '',
-    password: '',
-})
+  email: '',
+  password: '',
+});
 
-const router = useRouter()
+const router = useRouter();
 
-async function login () {
+async function login() {
   try {
-    // Versuche, den Benutzer einzuloggen.
-    await loginUser(email.value, password.value)
-    // Alles okay! Umleiten zur HomeView
-    await router.push('/')                            // Ergänzen
+    await loginUser(email.value, password.value);
+    await router.push('/');
   } catch (exception) {
-    // Die Zugangsdaten waren falsch, logge die Exception.
-    console.error('login error', exception)
-
-    // Übernehme die Fehlermeldungen aus der Exception.
-    errors.value = exception.errors
+    console.error('login error', exception);
+    errors.value = exception.errors;
   }
 }
 </script>
+
 <template>
-  <div class="login">
-    <section class="login-wrapper">
-      <form action="#" class="login-form" autocomplete="off" novalidate @submit.prevent="login">
+  <div class="login-container">
+    <RouterLink to="/" class="login-home-button">
+      Home
+    </RouterLink>
+
+    <h1>Login</h1>
+
+    <div class="login-box">
+      <form @submit.prevent="login" class="login-form">
         <div class="form-group">
-          <label class="form-label" for="email">E-Mail</label>
-          <input class="form-input" type="email" id="email" v-model="email"/>
-          <div class="form-error" v-if="errors.email.length > 0">
-            {{ errors.email }}
-          </div>
+          <label class="form-label">Email</label>
+          <input type="email" v-model="email" class="form-input" />
         </div>
         <div class="form-group">
-          <label class="form-label" for="password">Passwort</label>
-          <input class="form-input" type="password" id="password" v-model="password"/>
-          <div class="form-error" v-if="errors.password.length > 0">
-            {{ errors.password }}
-          </div>
+          <label class="form-label">Passwort</label>
+          <input type="password" v-model="password" class="form-input" />
         </div>
-        <div class="form-group">
-          <button class="btn btn--primary btn--block" v-bind:disabled=!hasLogin>
-            Login
-          </button>
-        </div>
+        <button :disabled="!hasLogin" class="login-submit">Login</button>
       </form>
-    </section>
+    </div>
   </div>
 </template>
-

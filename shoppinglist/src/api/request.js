@@ -72,7 +72,7 @@ export async function addList (name) {
         body: JSON.stringify( {
             "records":[{
             "fields": {
-                    "Account": ["recA4IYQB6gNaRY3V"],
+                    "Account": [token.value],
                     "Name": name
                 }}
             ]

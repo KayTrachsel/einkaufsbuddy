@@ -5,6 +5,7 @@ import LoginView from '../views/LoginView.vue'
 import FormView from '../views/FormView.vue'
 import ShoppingView from '../views/ShoppingView.vue'
 import ItemsView from '../views/ItemsView.vue'
+import NewItemView from '../views/NewItemView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,6 +41,12 @@ const router = createRouter({
       component: ShoppingView,
       props: true, // Ermöglicht das automatische Übergeben von Routen-Parametern als Props
   },
+  {
+    path: '/NewItemToList/:id',
+    name: 'NewItemToList',
+    component: NewItemView,
+    props: true, // Ermöglicht das automatische Übergeben von Routen-Parametern als Props
+},
   ]
 })
 

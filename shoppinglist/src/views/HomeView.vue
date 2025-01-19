@@ -13,14 +13,11 @@ const { isLoggedIn,logout } = useAuth()
       <h1>Einkaufsbuddy</h1>
       <p>Your online shopping list</p>
       
-      <div class="button-container" >
-        <RouterLink to="/lists" class="home-button" v-if="isLoggedIn">
+      <div class="button-container">
+        <RouterLink to="/lists" class="home-button">
           List Overview
         </RouterLink>
-        <RouterLink to="/login" class="home-button" v-if="!isLoggedIn">
-          List Overview
-        </RouterLink>
-        <RouterLink to="/items" class="home-button">
+        <RouterLink to="/search" class="home-button">
           Search for food
         </RouterLink>
       </div>

@@ -1,10 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { fetchLists,deleteList } from '../api/request.js';
+import { fetchLists, deleteList } from '../api/request.js';
 import { useAuth } from '../api/auth'
 
 const { token } = useAuth()
-
 
 const lists = ref([]);
 const loading = ref(true);
@@ -12,89 +11,48 @@ const currentAccount = token.value;
 
 onMounted(async () => {
     load();
-})
+});
 
-async function load()
-{
-    loading.value = true
+async function load() {
+    loading.value = true;
     try {
-        const data = await fetchLists()
-        lists.value = data.records 
-        console.log('Stream geladen', lists.value)
+        const data = await fetchLists();
+        lists.value = data.records;
+        console.log('Stream geladen', lists.value);
     } catch (error) {
-        console.error(error)
+        console.error(error);
     } finally {
-        loading.value = false
+        loading.value = false;
     }
 }
 </script>
 
 <template>
-  <div>
-      <h1>Lists for this account</h1>
-      <div v-if="loading">Loading...</div>
-      <table v-else class="styled-table">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Created</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="list in lists" :key="list.id">
-            <td v-if="currentAccount ==  list.fields.Account[0]">{{ list.fields.Name }}</td>
-            <td v-if="currentAccount ==  list.fields.Account[0]">{{ list.fields.Created }}</td>
-            <td v-if="currentAccount ==  list.fields.Account[0]">
-              <RouterLink :to="`ShoppingList/${list.id}`">
-               <button>Edit</button>
-              </RouterLink>
-              <button @click="deleteList(list.id); load()">Delete</button>
-            </td>
-        </tr>
-      </tbody>
-    </table>
-    <RouterLink to="/createlist">
-      <button>Add list</button>
+  <div class="list-view">
+    <RouterLink to="/createlist" class="add-list-button">
+      Add
     </RouterLink>
+
+    <RouterLink to="/" class="home-button">
+      Home
+    </RouterLink>
+
+    <h1>Shopping Lists</h1>
+
+    <div v-if="loading">Loading...</div>
+
+    <div v-else v-for="list in lists" class="lists-container">
+      <div v-if="currentAccount ==  list.fields.Account[0]" :key="list.id" class="list-item">
+        <div class="list-title" >{{ list.fields.Name }}</div>
+        <div class="button-group" v-if="currentAccount ==  list.fields.Account[0]">
+          <RouterLink :to="`/ShoppingList/${list.id}`" class="action-button open">
+            Edit
+          </RouterLink>
+          <button @click="deleteList(list.id); load()" class="action-button edit">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-
-<style>
-/* Tabelle */
-.styled-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 25px 0;
-  font-size: 18px;
-  text-align: left;
-  color: #ffffff; /* Textfarbe weiß */
-}
-.styled-table thead tr {
-  background-color: #1e88e5; /* Blau für Header */
-  color: #ffffff;
-  text-align: left;
-}
-.styled-table th,
-.styled-table td {
-  padding: 12px 15px;
-  border: 1px solid #333333; /* Dunkler Rand */
-}
-.styled-table tbody tr {
-  background-color: #212121; /* Dunkles Grau für Zeilen */
-}
-.styled-table tbody tr:nth-of-type(even) {
-  background-color: #2c2c2c; /* Etwas helleres Grau für Alternierung */
-}
-.styled-table tbody tr:last-of-type {
-  border-bottom: 2px solid #1e88e5; /* Blau für Abschluss */
-}
-.styled-table tbody tr:hover {
-  background-color: #37474f; /* Hellgraues Highlight bei Hover */
-}
-
-/* Überschrift */
-h1 {
-  color: #1e88e5; /* Blau passend zum Header */
-}
-</style>
