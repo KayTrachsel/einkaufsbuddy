@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { fetchList, deleteItem, fetchItem, fetchStore, fetchItInLiRecords } from '../api/request.js';
+import { fetchList, deleteItem, fetchItem, fetchStores } from '../api/request.js';
 
 
 const list = ref({});
@@ -79,9 +79,9 @@ async function itemDelete(itemToDel)
         <tr v-for="item in items" :key="item.id">
           <td>{{ item.Name }}</td>
           <td>{{ item.Price }} CHF </td>
-          <td>{{ item.Stores[0] }}</td>
-          <td><button @click="">Edit</button>
-            <button @click="itemDelete(item.ItemsInList); load()">Delete</button></td>
+          <td>{{ item.StoreName[0] }}</td>
+          <td>
+            <button @click="itemDelete(item.ItemsInList); load()">Remove</button></td>
         </tr>
       </tbody>
     </table>

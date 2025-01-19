@@ -1,3 +1,7 @@
+import { useAuth } from './auth'
+
+const { token, setToken } = useAuth()
+
 const AIRTABLE_API_BASE = 'https://api.airtable.com/v0/appZwk15FqN5pmjkM/';
 const AIRTABLE_API_KEY = 'patcovSIWtWEms7J6.5bed5d3647fba273a26203140e9c6532e3ed046062c11bde42c50fca04b6701e'; // Sicherstellen, dass diese sicher bleibt!
 
@@ -27,10 +31,14 @@ async function request (url, options = {}) {
 
 export async function loginUser (email, password) {
     const response = await request('tblr15gBUGFQkzC2A')
-    response.records.forEach(element => {if (element.fields.password==password && element.fields.email==email) {
-        
+    response.records.forEach(element => {
+        if (element.fields.Password==password && element.fields.Email==email) {
+        console.log(response.token, "pain")
+        setToken(element.id)
+
+        return response.token
     }
-        
+        //throw new Error('Login failed due to an unknown error')
     });
 }
 
@@ -120,8 +128,8 @@ export async function deleteItem (id) {
     return response
 }
 
-export async function fetchStore (id) {
-    const response = await request('tbl84xBjjyVqbrmF3/' + id)
+export async function fetchStores () {
+    const response = await request('tbl84xBjjyVqbrmF3')
     console.log(response);
     return response
 }

@@ -1,14 +1,12 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { fetchLists,deleteList } from '../api/request.js';
-import { useAuth } from '../api/auth'
-
-const { token } = useAuth()
+import { fetchItems, fetchStores } from '../api/request.js';
 
 
-const lists = ref([]);
+
+const items = ref([]);
 const loading = ref(true);
-const currentAccount = token.value;
+const stores = ref([])
 
 onMounted(async () => {
     load();
@@ -18,45 +16,48 @@ async function load()
 {
     loading.value = true
     try {
-        const data = await fetchLists()
-        lists.value = data.records 
-        console.log('Stream geladen', lists.value)
+        const data = await fetchItems()
+        items.value = data.records 
+        console.log('Stream geladen', items.value)
+        const storeData = await fetchStores()
+        stores.value = storeData.records 
+        console.log('Stores geladen', stores.value)
     } catch (error) {
         console.error(error)
     } finally {
         loading.value = false
     }
 }
+
+async function getStoreName(storeId) {
+  for (const element of stores.value) {
+    if( element.id == storeId){
+      return element.fields.Name
+    }
+  }
+}
 </script>
 
 <template>
   <div>
-      <h1>Lists for this account</h1>
+      <h1>Items</h1>
       <div v-if="loading">Loading...</div>
       <table v-else class="styled-table">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Created</th>
-          <th>Actions</th>
+          <th>Item</th>
+          <th>Price</th>
+          <th>Stores</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="list in lists" :key="list.id">
-            <td v-if="currentAccount ==  list.fields.Account[0]">{{ list.fields.Name }}</td>
-            <td v-if="currentAccount ==  list.fields.Account[0]">{{ list.fields.Created }}</td>
-            <td v-if="currentAccount ==  list.fields.Account[0]">
-              <RouterLink :to="`ShoppingList/${list.id}`">
-               <button>Edit</button>
-              </RouterLink>
-              <button @click="deleteList(list.id); load()">Delete</button>
-            </td>
+        <tr v-for="item in items" :key="item.id">
+          <td>{{ item.fields.Name }}</td>
+          <td>{{ item.fields.Price }}</td>
+          <td>{{item.fields.StoreName[0] }}</td>
         </tr>
       </tbody>
     </table>
-    <RouterLink to="/createlist">
-      <button>Add list</button>
-    </RouterLink>
   </div>
 </template>
 
@@ -91,10 +92,5 @@ async function load()
 }
 .styled-table tbody tr:hover {
   background-color: #37474f; /* Hellgraues Highlight bei Hover */
-}
-
-/* Überschrift */
-h1 {
-  color: #1e88e5; /* Blau passend zum Header */
 }
 </style>
