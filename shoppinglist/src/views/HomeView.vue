@@ -17,7 +17,7 @@ const { isLoggedIn,logout } = useAuth()
         <RouterLink to="/lists" class="home-button">
           List Overview
         </RouterLink>
-        <RouterLink to="/search" class="home-button">
+        <RouterLink to="/items" class="home-button">
           Search for food
         </RouterLink>
       </div>
